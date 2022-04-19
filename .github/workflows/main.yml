@@ -1,0 +1,25 @@
+name: cd
+
+on:
+  push:
+    branches:
+      - main
+
+  jobs:
+    cd:
+      runs-on: ubuntu-latest
+
+      steps:
+        - uses: actions/checkout@v1
+
+        - name: Run cd
+          uses: appleboy/ssh-action@main
+          with:
+            host: ${{ secrets.HOST }}
+            username: ${{ secrets.SSH_USERNAME }}
+            key: ${{ secrets.SSH_PRIVATE_KEY }}
+            port: 22
+            script: |
+              cd /var/www/ci_cd_autodeploy
+              git pull
+              npm install
